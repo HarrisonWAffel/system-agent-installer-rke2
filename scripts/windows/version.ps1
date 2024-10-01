@@ -3,14 +3,13 @@ $ErrorActionPreference = 'Stop'
 if (-not $env:ARCH) {
     $env:ARCH = "amd64"
 }
-$env:OS = "windows"
 
-$FALLBACK_VERSION = "v1.20.4+rke2r1"
+$FALLBACK_VERSION = "v1.30.2+rke2r1"
 
 # This version script expects either a tag of format: <rke2-version> or no tag at all.
 $TREE_STATE = "clean"
-$COMMIT = $env:DRONE_COMMIT
-$TAG = $env:DRONE_TAG
+$COMMIT = $env:GITHUB_SHA
+$TAG = $env:TAG
 
 if (-not $COMMIT -and $env:GITHUB_SHA) {
     $COMMIT = $env:GITHUB_SHA
@@ -82,13 +81,21 @@ else {
     $VERSION = $TAG
 }
 
-$env:URI_VERSION = [uri]::EscapeDataString($VERSION)
+$env:URI_VERSION = $VERSION
+# Docker tags cannot include '+'
 $VERSION = $VERSION.Replace('+', '-')
 
 #export stuff out 
 $env:VERSION = $VERSION
 $env:COMMIT = $COMMIT
-$env:REPO = "rancher"
+
+if ((-not $env:REPO) -or ($env:REPO -eq ""))
+{
+    $REPO = "rancher"
+} else {
+    $REPO = $env:REPO
+}
+
 $env:IMAGE = "$REPO/system-agent-installer-rke2:$VERSION"
 
 if ( $env:GITHUB_ENV ) {

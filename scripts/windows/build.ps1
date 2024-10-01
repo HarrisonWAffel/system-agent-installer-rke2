@@ -1,6 +1,4 @@
 $ErrorActionPreference = 'Stop'
 
-Push-Location $PSScriptRoot
-
-./download.ps1
-./package.ps1
+./scripts/windows/download.ps1
+./scripts/windows/package.ps1

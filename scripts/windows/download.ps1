@@ -1,10 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-.$PSScriptRoot/version.ps1
-
-Set-Location $PSScriptRoot/../..
-
-# This script serves to download/stage the installer
+./scripts/windows/version.ps1
 
 mkdir -p artifacts -f
 
